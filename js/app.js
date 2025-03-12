@@ -3,6 +3,7 @@ const todoInput = document.getElementById('todo-input');
 const todoListUL = document.getElementById('todo-list');
 
 let allTodos = getTodos();
+// let allTodos = [];
 
 updateTodoList();
 // form tag lắng nghe sự kiện submit và thực hiện hàm thêm todo
@@ -83,3 +84,44 @@ function getTodos() {
     const todos = localStorage.getItem("todos") || "[]";
     return JSON.parse(todos);
 }
+
+// add event dragstart and dragend vào mỗi todo
+// function enableDragAndDrop() {
+//     const todoItems = document.querySelectorAll(".todo");
+//     todoItems.forEach((todo, todoIndex) => {
+//         todo.draggable = true;
+//         // khi drag thì thêm class dragging vào todo
+//         todo.addEventListener("dragstart", (e) => {
+//             todo.classList.add("dragging");
+//         })
+
+//         todo.addEventListener("dragend", () => {
+//             todo.classList.remove("dragging");
+//         })
+//     })
+// }
+
+// todoListUL.addEventListener("dragover", (e) => {
+//     e.preventDefault();
+//     const draggingItem = document.querySelector(".dragging");
+//     const afterElement = getAfterElement(todoListUL, e.clientY);
+
+//     if(afterElement == null) {
+//         todoListUL.append(draggingItem);
+//     } 
+//     else {
+//         todoListUL.insertBefore(draggingItem, afterElement);
+//     }
+
+//     todoListUL.addEventListener("drop", (e) => {
+//         e.preventDefault();
+//         reorderTodos();
+//     })
+// })
+
+// function getAfterElement() {
+
+// }
+// function reorderTodos() {
+
+// }
