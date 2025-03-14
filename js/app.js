@@ -6,6 +6,25 @@ let allTodos = getTodos();
 // let allTodos = [];
 
 updateTodoList();
+
+const initSortableList = (e) => {
+    e.preventDefault();
+    const draggingItem = todoListUL.querySelector(".dragging");
+
+    // getting all items except currently dragging and making array of them
+    const todos = [...todoListUL.querySelectorAll(".todo:not(.dragging)")];
+
+    // Finding the sibling after which the dragging item should be place
+    let nextTodo = todos.find(todo => {
+        return e.clientY <= todo.offsetTop + todo.offsetHeight / 2;
+    })
+
+    todoListUL.insertBefore(draggingItem, nextTodo);
+}
+
+todoListUL.addEventListener("dragover", initSortableList);
+todoListUL.addEventListener("dragenter", e => e.preventDefault());
+
 // form tag lắng nghe sự kiện submit và thực hiện hàm thêm todo
 todoForm.addEventListener('submit', function(e) {
     e.preventDefault();  
@@ -30,10 +49,10 @@ function addTodo() {
 function updateTodoList() {
     todoListUL.innerHTML = "";
     allTodos.forEach((todo, todoIndex) => {
-        todoItem = createTodoItem(todo, todoIndex);
+        let todoItem = createTodoItem(todo, todoIndex);
         todoListUL.append(todoItem);
     });
-    enableDragAndDrop();
+    initDragAndDrop();
 }
 // tạo <li> chứa content theo format và return về <li>
 function createTodoItem(todo, todoIndex) {
@@ -42,6 +61,7 @@ function createTodoItem(todo, todoIndex) {
     const todoText = todo.text;
     
     todoLI.className = "todo";
+    todoLI.setAttribute("draggable", "true");
     todoLI.innerHTML = `
             <input type="checkbox" id="${todoId}">
             <label class="custom-checkbox" for="${todoId}">
@@ -84,4 +104,18 @@ function saveTodos() {
 function getTodos() {
     const todos = localStorage.getItem("todos") || "[]";
     return JSON.parse(todos);
+}
+
+function initDragAndDrop() {
+    const todoItems = todoListUL.querySelectorAll(".todo");
+    if(todoItems.length != 0) {
+        todoItems.forEach(todo => {
+            todo.addEventListener("dragstart", () => {
+                todo.classList.add("dragging");
+            })
+            todo.addEventListener("dragend", () => {
+                todo.classList.remove("dragging");
+            })
+        })
+    } 
 }

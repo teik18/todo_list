@@ -152,7 +152,6 @@ input[type="checkbox"] {
         font-size: 15vw;
     }
 }
-/* làm mờ khi kéo */
-/* .todo.dragging {
-    opacity: 0.5;
-} */
+.todo.dragging :where(label, button) {
+    opacity: 0;
+}
