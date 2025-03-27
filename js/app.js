@@ -3,7 +3,6 @@ const todoInput = document.getElementById('todo-input');
 const todoListUL = document.getElementById('todo-list');
 
 let allTodos = getTodos();
-// let allTodos = [];
 
 updateTodoList();
 
@@ -20,6 +19,16 @@ const initSortableList = (e) => {
     })
 
     todoListUL.insertBefore(draggingItem, nextTodo);
+
+    // lưu lại thứ tự
+    const newTodos = [...todoListUL.querySelectorAll(".todo")];
+    allTodos = newTodos.map(todoLI =>{
+        const text = todoLI.querySelector(".todo-text").innerText;
+        const completed = todoLI.querySelector("input").checked;
+        return { text, completed };
+    });
+    saveTodos();
+    // updateTodoList();
 }
 
 todoListUL.addEventListener("dragover", initSortableList);
@@ -30,6 +39,7 @@ todoForm.addEventListener('submit', function(e) {
     e.preventDefault();  
     addTodo();
 });
+
 // lấy dữ liệu từ input và push vào mảng
 // mỗi lần push dữ liệu mới sẽ update <ul> và save vào localStorage
 function addTodo() {
@@ -45,6 +55,7 @@ function addTodo() {
         todoInput.value = "";
     }
 }
+
 // update từ trong mảng để tạo <li> cho từng todo và add vào <ul>
 function updateTodoList() {
     todoListUL.innerHTML = "";
@@ -54,6 +65,7 @@ function updateTodoList() {
     });
     initDragAndDrop();
 }
+
 // tạo <li> chứa content theo format và return về <li>
 function createTodoItem(todo, todoIndex) {
     const todoId = "todo-" + todoIndex;
@@ -89,17 +101,20 @@ function createTodoItem(todo, todoIndex) {
     checkbox.checked = todo.completed;
     return todoLI;
 }
+
 // delete todo item
 function deleteTodoItem(todoIndex) {
     allTodos = allTodos.filter((_, i) => i !== todoIndex);
     saveTodos();
     updateTodoList();
 }
+
 // lưu dữ liệu vào localStorage
 function saveTodos() {
     const todosJson = JSON.stringify(allTodos);
     localStorage.setItem("todos", todosJson);
 }
+
 // lấy dữ liệu đã lưu từ localStorage
 function getTodos() {
     const todos = localStorage.getItem("todos") || "[]";
